@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whimsy Network | Full of Whimsy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;700&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --desk: #b0aca2;
+            --paper: #fdfdfd;
+            --ink: #1a1a1a;
+            --whimsy-blue: #4a90e2;
+            --wa-green: #25D366;
+            --accent: #ff6b6b;
+            --post-it: #f5e6c4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--desk);
+            background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            padding: 10px;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+        .filters { position: absolute; width: 0; height: 0; }
+        .page-texture {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1000; opacity: 0.3;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            mix-blend-mode: multiply;
+        }
+        section { max-width: 900px; margin: 80px auto; position: relative; }
+        
+        /* HERO SECTION */
+        .hero-viewport {
+            perspective: 1200px;
+            margin: 40px auto;
+            max-width: 1000px;
+        }
+        .hero {
+            height: 550px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg');
+            background-size: cover; background-position: center;
+            filter: url(#heavy-crumple);
+            border: 12px solid white;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.3);
+            display: flex; flex-direction: column; justify-content: space-between; padding: 40px;
+            transform: rotateX(0deg) rotateY(0deg);
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.6s ease;
+        }
+        .hero:hover {
+            transform: rotateX(10deg) rotateY(-5deg);
+            box-shadow: 25px 25px 60px rgba(0,0,0,0.4);
+        }
+        .hero-text { 
+             font-family: 'Oswald', sans-serif; 
+             color: white; font-size: 5.5rem; 
+             line-height: 0.85; text-align: right; 
+             text-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            transform: translateZ(50px);
+        }
+        .hero-tag { 
+             align-self: flex-start; 
+             background: white; padding: 8px 15px; 
+             font-family: 'Gochi Hand'; font-size: 1.5rem; 
+             transform: rotate(-2deg) translateZ(30px); 
+             filter: url(#rough-edges); 
+         }
+
+        /* MISSION */
+        .paper-sheet {
+            background: var(--paper); padding: 60px;
+            filter: url(#heavy-crumple); box-shadow: 5px 5px 20px rgba(0,0,0,0.1);
+        }
+        h2 { font-family: 'Oswald', sans-serif; font-size: 2.8rem; margin-bottom: 20px; text-transform: uppercase; }
+        p { font-size: 1.2rem; line-height: 1.7; margin-bottom: 20px; }
+
+        /* FOUNDERS */
+        .founders-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 40px 0; }
+        .founder-card {
+            position: relative; background: transparent; padding: 15px 15px 40px 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); text-align: center;
+        }
+        .founder-card::before {
+            content: ""; position: absolute; inset: 0; z-index: 0;
+            background: white; filter: url(#rough-edges);
+        }
+        .founder-card > * {
+            position: relative; z-index: 1;
+        }
+        .founder-img { width: 100%; aspect-ratio: 1/1; background: #eee; margin-bottom: 15px; object-fit: cover; }
+        .founder-name-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
+        .founder-name { font-family: 'Gochi Hand'; font-size: 2rem; filter: url(#rough-edges); }
+        .founder-card p { filter: url(#rough-edges); }
+        .founder-card .social-icon svg { width: 24px; height: 24px; fill: #0077b5; }
+
+        /* DEPARTMENTS */
+        .dept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .dept-card { background: #f9f9f9; padding: 30px; filter: url(#rough-edges); border: 1px dashed #ccc; }
+        .dept-card h3 { font-family: 'Oswald', sans-serif; color: var(--whimsy-blue); margin-bottom: 10px; }
+
+        /* HEADS */
+        .head-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .head-card { position: relative; background: transparent; padding: 30px; text-align: center; }
+        .head-card::before {
+            content: ""; position: absolute; inset: 0; z-index: 0;
+            background: #f9f9f9; border: 1px dashed #ccc; filter: url(#rough-edges);
+        }
+        .head-card > * {
+            position: relative; z-index: 1;
+        }
+        .head-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 18px; border: 1px dashed #ccc; }
+        .head-card h3 { font-family: 'Oswald', sans-serif; color: var(--whimsy-blue); margin-bottom: 10px; filter: url(#rough-edges); }
+        .head-card p { filter: url(#rough-edges); }
+
+
+
+        /* GALLERY SECTION */
+        .gallery-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--whimsy-blue) transparent;
+        }
+        .gallery-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .gallery-container::-webkit-scrollbar-thumb {
+            background: var(--whimsy-blue);
+            border-radius: 10px;
+        }
+        .gallery-item {
+            flex: 0 0 300px;
+            background: white;
+            padding: 10px;
+            filter: url(#rough-edges);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+        .gallery-description {
+            background: var(--post-it);
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            filter: url(#rough-edges);
+            font-family: 'Gochi Hand';
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        /* CONTACT FORM */
+        .touch-form input, .touch-form textarea {
+            width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #ddd;
+            font-family: 'Inter', sans-serif; background: transparent;
+        }
+        .btn {
+            display: inline-block; background: var(--post-it); color: black;
+            padding: 15px 40px; font-family: 'Oswald', sans-serif; font-size: 1.6rem;
+            text-decoration: none; filter: url(#rough-edges); cursor: pointer; border: none; width: 100%; text-align: center;
+        }
+        #thank-you-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            font-family: 'Gochi Hand';
+            font-size: 2.5rem;
+            color: var(--whimsy-blue);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 70px;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; z-index: 2500; border-bottom: 3px solid var(--ink);
+        }
+        .nav-logo { font-family: 'Oswald', sans-serif; font-size: 1.6rem; color: var(--ink); }
+        .nav-right-side { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { 
+             text-decoration: none; color: var(--ink); font-family: 'Oswald', sans-serif; 
+             text-transform: uppercase; font-size: 0.9rem; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--whimsy-blue); }
+        .floating-volunteer-btn {
+            position: fixed; bottom: 30px; right: 30px; z-index: 4000;
+            background: var(--accent); color: white; padding: 15px 30px;
+            font-family: 'Oswald', sans-serif; text-decoration: none;
+            filter: url(#rough-edges); box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 1.2rem;
+        }
+        .floating-volunteer-btn:hover { transform: scale(1.1) rotate(-3deg); }
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; z-index: 3100; }
+        .hamburger div { width: 25px; height: 3px; background: var(--ink); transition: 0.3s; }
+        .hamburger.active div:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active div:nth-child(2) { opacity: 0; }
+        .hamburger.active div:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        #contact-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 5000;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; position: absolute; top: 70px; left: 0; width: 100%;
+                flex-direction: column; background: white; padding: 20px; border-bottom: 3px solid var(--ink);
+                text-align: center; gap: 15px;
+            }
+            .nav-links.active { display: flex; }
+            .hamburger { display: flex; }
+        }
+        html { scroll-behavior: smooth; }
+
+        /* Updated Footer styles */
+        .footer-social-row {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 20px;
+        }
+        .footer-social-row .social-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: black;
+            transition: transform 0.3s ease;
+        }
+        .footer-social-row .social-icon:hover svg {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-logo">WHIMSY NETWORK</div>
+        <div class="nav-right-side">
+            <div class="nav-links" id="navLinks">
+                <a href="#mission" onclick="toggleMenu()">Mission</a>
+                <a href="#founders" onclick="toggleMenu()">Founders</a>
+                <a href="#gallery" onclick="toggleMenu()">Gallery</a>
+                <a href="#contact" onclick="toggleMenu()">Contact</a>
+            </div>
+            <div class="hamburger" id="hamburgerBtn" onclick="toggleMenu()">
+                <div></div><div></div><div></div>
+            </div>
+        </div>
+    </nav>
+
+    <a href="javascript:void(0)" class="floating-volunteer-btn" onclick="toggleForm()">VOLUNTEER NOW</a>
+
+    <svg class="filters">
+        <filter id="rough-edges"><feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" /><feDisplacementMap in="SourceGraphic" scale="3" /></filter>
+        <filter id="heavy-crumple"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="5" /><feDisplacementMap in="SourceGraphic" scale="8" /></filter>
+    </svg>
+
+    <div class="page-texture"></div>
+
+    <div id="contact-overlay" onclick="closeOverlay(event)">
+        <div class="post-it" style="background:#f5e6c4; padding:50px; text-align:center; filter:url(#heavy-crumple); position:relative; width:350px;" onclick="event.stopPropagation()">
+            <span style="position:absolute; top:10px; right:15px; cursor:pointer;" onclick="toggleForm()">[x]</span>
+            <h2 style="font-family:'Oswald';">JOIN US</h2>
+            <a href="https://chat.whatsapp.com/KyjJPaUP3bGIhhkZjZFjbf" target="_blank" class="btn" style="background:var(--wa-green); color:white; margin-top:20px;">WHATSAPP LINK</a>
+        </div>
+    </div>
+
+    <div class="hero-viewport">
+        <header class="hero">
+            <div class="hero-tag">p.s.: we do everything</div>
+            <div class="hero-text">FULL<br>OF<br>WHIMSY</div>
+        </header>
+    </div>
+
+    <section id="mission" class="paper-sheet">
+        <h2>Let's Talk Whimsy</h2>
+        <p>"Whimsy Network Trust is a youth-led initiative built on one simple belief: impact should not be limited to one single cause and change should always come with some whimsy."</p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+            <a href="https://docs.google.com/document/d/1QIfWHdzk8owtdb4H5Tyob2RBOFL57vKlN1aYDvl5-xo/edit?usp=sharing" target="_blank" class="btn" style="width:auto;">LET'S TALK WHIMSY</a>
+        </div>
+    </section>
+
+    <section id="founders">
+        <h2 style="text-align:center;">MEET THE FOUNDERS!</h2>
+        <div class="founders-grid">
+            <div class="founder-card" style="transform: rotate(-2deg);">
+                <div class="founder-img" style="background: #ccc url('./Images/founder1.jpg') bottom/cover; "></div>
+                <div class="founder-name-wrap">
+                    <div class="founder-name">Ridhima Chopra</div>
+                    <a href="https://www.linkedin.com/in/ridhima-chopra-096259379" target="_blank" class="social-icon"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+                <p style="font-size:0.9rem; text-transform:uppercase; letter-spacing:2px;">Founder</p>
+            </div>
+            <div class="founder-card" style="transform: rotate(2deg);">
+                <div class="founder-img" style="background: #ccc url('./Images/founder2.jpg') center/cover;"></div>
+                <div class="founder-name-wrap">
+                    <div class="founder-name">Siya Sharma</div>
+                    <a href="https://www.linkedin.com/in/siya-sharma-504241391" target="_blank" class="social-icon"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+                <p style="font-size:0.9rem; text-transform:uppercase; letter-spacing:2px;">Co-Founder</p>
+            </div>
+        </div>
+        <div class="paper-sheet" style="text-align:center; font-family:'Gochi Hand'; font-size:1.5rem;">
+            <p>We hope that we can go places with all the hardwork we've put into this, through late night talks and hours of scrolling on linkedin and pinterest. This truly is our roman empire.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2 style="text-align:center;">DEPARTMENTS</h2>
+        <div class="dept-grid">
+            <div class="dept-card"><h3>EVENTS</h3><p>Major operations and on-ground executions.</p></div>
+            <div class="dept-card"><h3>HR</h3><p>Volunteer recruitment and interview processes.</p></div>
+            <div class="dept-card"><h3>OUTREACH</h3><p>Social media content and creative strategy.</p></div>
+        </div>
+    </section>
+
+    <section>
+        <h2 style="text-align:center;">HEADS</h2>
+        <div class="head-grid">
+            <div class="head-card"><img class="head-img" src="./Images/hr_head.jpeg" alt="HR head"><h3>HR</h3><p>Tanish Khurana</p></div>
+            <div class="head-card"><img class="head-img" src="./Images/manager.jpeg" alt="Manager"><h3>MANAGER</h3><p>Myra Walia</p></div>
+            <div class="head-card"><img class="head-img" src="./Images/socials_head.jpeg" alt="Out Reach head"><h3>OUTREACH </h3><p>Krishnam Singla</p></div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 style="text-align:center;">OUR GALLERY</h2>
+        
+        <!-- STALL SECTION -->
+        <h3 style="font-family: 'Oswald'; margin-top: 40px; color: black; text-align: center;">STALL : MAY 26'</h3>
+        <div class="gallery-container">
+            <div class="gallery-item"><img src="./Images/Stall_Photo1.jpeg" alt="Stall Photo 1"></div>
+            <div class="gallery-item"><img src="./Images/Stall_Photo2.jpeg" alt="Stall Photo 2"></div>
+            <div class="gallery-item"><img src="./Images/Stall_Photo3.jpeg" alt="Stall Photo 3"></div>
+            <div class="gallery-item"><img src="./Images/Stall_Photo4.jpeg" alt="Stall Photo 4"></div>
+            <div class="gallery-item"><img src="./Images/Stall_Photo5.jpeg" alt="Stall Photo 5"></div>
+        </div>
+        <div class="gallery-description">
+            <p>A glimpse into our vibrant setup from May 26'. This stall was a hub of whimsical energy, showcasing our latest initiatives and engaging with our amazing community.</p>
+        </div>
+
+        <!-- PAD DONATION DRIVE SECTION -->
+        <h3 style="font-family: 'Oswald'; margin-top: 40px; color: black; text-align: center;">PAD DONATION DRIVE</h3>
+        <div class="gallery-container">
+            <div class="gallery-item"><img src="./Images/Donation_Photo1.jpeg" alt="Donation Photo 1"></div>
+            <div class="gallery-item"><img src="./Images/Donation_Photo2.jpeg" alt="Donation Photo 2"></div>
+            <div class="gallery-item"><img src="./Images/Donation_Photo3.jpeg" alt="Donation Photo 3"></div>
+            <div class="gallery-item"><img src="./Images/Donation_Photo4.jpeg" alt="Donation Photo 4"></div>
+            <div class="gallery-item"><img src="./Images/Donation_Photo5.jpeg" alt="Donation Photo 5"></div>
+        </div>
+        <div class="gallery-description">
+            <p>Our Pad Donation Drive in action. These images capture the dedication of our volunteers and the generosity of our donors as we worked together to make a real-world impact.</p>
+        </div>
+    </section>
+
+    <section id="contact" class="paper-sheet">
+        <h2 style="text-align:center;">GET IN TOUCH</h2>
+        <form id="whimsy-form" action="https://formspree.io/f/xvzbbovj" method="POST" class="touch-form">
+            <input type="hidden" name="Submission Local Time" id="submission-time">
+            <input type="text" name="name" placeholder="Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <textarea name="message" placeholder="Your Whimsical Message..." required></textarea>
+            <button type="submit" id="submit-btn" class="btn">SEND MESSAGE</button>
+        </form>
+        <div id="thank-you-message">
+             Message Sent! Stay Whimsical.
+        </div>
+    </section>
+
+    <footer style="text-align: center; padding: 60px;">
+        <p style="font-family: 'Gochi Hand'; font-size: 1.5rem;">thewhimsynetwork@gmail.com</p>
+        <div class="footer-social-row">
+            <a href="https://www.instagram.com/whimsynetwork?igsh=cmx0bmpweWNneWF5&utm_source=qr" target="_blank" class="social-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+            <a href="https://pin.it/4L8pvdS4u" target="_blank" class="social-icon"><svg viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.261 7.929-7.261 4.162 0 7.397 2.965 7.397 6.93 0 4.135-2.607 7.462-6.224 7.462-1.215 0-2.358-.631-2.75-1.378l-.748 2.853c-.271 1.034-1.002 2.331-1.492 3.127 1.124.347 2.31.534 3.535.534 6.627 0 12-5.373 12-12s-5.373-12-12-12z"/></svg></a>
+            <a href="https://www.linkedin.com/company/whimsy-network/" target="_blank" class="social-icon"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+        </div>
+    </footer>
+
+    <script>
+        // Jitter animations
+        const els = document.querySelectorAll('.paper-sheet, .founder-card, .dept-card, .gallery-item');
+        function jitter(e, i) {
+            const x=(Math.random()-0.5)*i, y=(Math.random()-0.5)*i, r=(Math.random()-0.5)*(i/2);
+            e.style.transform = `translate(${x}px, ${y}px) rotate(${r}deg)`;
+        }
+        els.forEach(el => {
+            let iv;
+            el.addEventListener('mouseenter', () => iv = setInterval(()=>jitter(el, 3), 150));
+            el.addEventListener('mouseleave', () => { clearInterval(iv); el.style.transform=''; });
+        });
+
+        // Navigation
+        function toggleMenu() {
+            const nav = document.getElementById('navLinks');
+            const ham = document.getElementById('hamburgerBtn');
+            if (window.innerWidth <= 768) {
+                nav.classList.toggle('active');
+                ham.classList.toggle('active');
+            }
+        }
+
+        // Overlay Logic
+        function toggleForm() {
+            const o = document.getElementById('contact-overlay');
+            o.style.display = (o.style.display === 'flex') ? 'none' : 'flex';
+        }
+        function closeOverlay(event) {
+            const overlay = document.getElementById('contact-overlay');
+            if (event.target === overlay) { toggleForm(); }
+        }
+
+        // Form Handling
+        const form = document.getElementById("whimsy-form");
+        async function handleSubmit(event) {
+            event.preventDefault();
+            const now = new Date();
+            const timeField = document.getElementById("submission-time");
+            timeField.value = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+            
+            const status = document.getElementById("thank-you-message");
+            const submitBtn = document.getElementById("submit-btn");
+            const data = new FormData(event.target);
+            
+            submitBtn.innerText = "Sending...";
+            submitBtn.disabled = true;
+
+            fetch(event.target.action, {
+                method: form.method,
+                body: data,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    form.style.display = "none";
+                    status.style.display = "block";
+                } else {
+                    submitBtn.innerText = "Oops! Try again";
+                    submitBtn.disabled = false;
+                }
+            }).catch(error => {
+                submitBtn.innerText = "Error! Try again";
+                submitBtn.disabled = false;
+            });
+        }
+        form.addEventListener("submit", handleSubmit);
+    </script>
+</body>
+</html>
